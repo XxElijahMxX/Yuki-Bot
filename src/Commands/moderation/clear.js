@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder, PermissionsBitField } = require("discord.js");
-const e = require("express");
-const { execute } = require("../community/test");
 
 module.exports = {
   data: new SlashCommandBuilder()
