@@ -7,6 +7,7 @@ const {
   MessageManager,
   Embed,
   Collection,
+  Events,
 } = require(`discord.js`);
 
 const fs = require("fs");
@@ -44,7 +45,7 @@ const commandFolders = fs.readdirSync("./src/Commands");
 const levelSchema = require("./schemas.js/level");
 client.on(Events.MessageCreate, async (message) => {
   const { guild, author } = message;
-  if (!guild || author) return;
+  if (!guild || author.bot) return;
 
   levelSchema.findOne(
     { Guild: guild.id, User: author.id },
