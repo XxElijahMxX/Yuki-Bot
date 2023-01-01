@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const currentDate = new Date();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -11,6 +10,7 @@ module.exports = {
       content: "What am I a clock? The date and time is",
     });
 
+    const currentDate = new Date();
     await interaction.channel.send(currentDate.toLocaleString());
   },
 };
