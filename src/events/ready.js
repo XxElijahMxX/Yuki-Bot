@@ -1,28 +1,64 @@
+const mongoose = require("mongoose");
+const mongodbURL = process.env.MONGODBURL;
+
 module.exports = {
-    name: 'ready',
-    once: true,
-    async execute(client) {
-        console.log('Ready!');
+  name: "ready",
+  once: true,
+  async execute(client) {
+    console.log("Ready!");
 
-        async function pickPresence () {
-            const option = Math.floor(Math.random() * statusArray.length);
+    if (!mongodbURL) return;
 
-            try {
-                await client.user.setPresence({
-                    activities: [
-                        {
-                            name: statusArray[option].content,
-                            type: statusArray[option].type,
+    await mongoose.connect(mongodbURL || "", {
+      keepAlive: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-                        },
-                    
-                    ],
+    if (mongoose.connect) {
+      console.log("The database is online!");
+    }
 
-                    status: statusArray[option].status
-                })
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    },
+    const statusArray = [
+      {
+        type: "LISTENING",
+        content: "/invite command",
+        status: "online",
+      },
+      {
+        type: "WATCHING",
+        content: `${client.guilds.cache.size} servers!`,
+        status: "online",
+      },
+      {
+        type: "COMPETING",
+        content: `/help command`,
+        status: "online",
+      },
+      {
+        type: "PLAYING",
+        content: ``,
+        status: "online",
+      },
+    ];
+
+    async function pickPresence() {
+      const option = Math.floor(Math.random() * statusArray.length);
+
+      try {
+        await client.user.setPresence({
+          activities: [
+            {
+              name: statusArray[option].content,
+              type: statusArray[option].type,
+            },
+          ],
+
+          status: statusArray[option].status,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
 };
